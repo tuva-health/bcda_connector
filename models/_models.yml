@@ -1,0 +1,53 @@
+version: 2
+
+models:
+### final
+  - name: eligibility
+    description: Final eligibility
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
+      materialized: table
+      alias: eligibility
+
+  - name: medical_claim
+    description: Final medical claim
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
+      materialized: table
+      alias: medical_claim
+
+  - name: pharmacy_claim
+    description: Final pharmacy claim
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
+      materialized: table
+      alias: pharmacy_claim
+
+### staging
+
+  - name: careteam_pivot
+    description: Pivot medical claim procedures
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
+      materialized: table
+      alias: careteam_pivot
+
+  - name: diagnosis_pivot
+    description: Pivot medical claim diagnosis
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
+      materialized: table
+      alias: diagnosis_pivot
+
+  - name: procedure_pivot
+    description: Pivot medical claim procedures
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
+      materialized: table
+      alias: procedure_pivot
