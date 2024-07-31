@@ -151,25 +151,25 @@ select
     , 'bcda' as data_source
     , eob.filename as file_name
     , eob.processed_datetime as ingest_datetime
-from {{ source('multicare_bcda','explanationofbenefit') }} eob
-left join {{ source('multicare_bcda','explanationofbenefit_extension') }} tob_2
+from {{ ref('explanationofbenefit') }} eob
+left join {{ source('explanationofbenefit_extension') }} tob_2
     on eob.id = tob_2.eob_id
     and url = 'https://bluebutton.cms.gov/resources/variables/clm_srvc_clsfctn_type_cd'
-left join {{ source('multicare_bcda','explanationofbenefit_supportinginfo') }} tob_3
+left join {{ ref('explanationofbenefit_supportinginfo') }} tob_3
     on eob.id = tob_3.eob_id
     and LOWER(category_coding_0_display) = 'type of bill'
-left join {{ source('multicare_bcda','explanationofbenefit_supportinginfo') }} dis
+left join {{ ref('explanationofbenefit_supportinginfo') }} dis
     on eob.id = dis.eob_id
     and LOWER(dis.category_coding_0_display) = 'discharge status'
-left join {{ source('multicare_bcda','explanationofbenefit_supportinginfo') }} ad_type
+left join {{ ref('explanationofbenefit_supportinginfo') }} ad_type
     on eob.id = ad_type.eob_id
     and lower(ad_type.category_coding_0_display) = 'information'
     and lower(ad_type.category_coding_1_display) = 'claim inpatient admission type code'
-left join {{ source('multicare_bcda','explanationofbenefit_supportinginfo') }} ad_src
+left join {{ ref('explanationofbenefit_supportinginfo') }} ad_src
     on eob.id = ad_src.eob_id
     and lower(ad_src.category_coding_0_display) = 'information'
     and lower(ad_src.category_coding_1_display) = 'claim source inpatient admission code'
-left join {{ source('multicare_bcda','explanationofbenefit_supportinginfo') }} admission
+left join {{ ref('explanationofbenefit_supportinginfo') }} admission
     on eob.id = admission.eob_id
     and lower(admission.category_coding_0_code) = 'admissionperiod'
 left join {{ ref('diagnosis_pivot') }} dx

@@ -31,5 +31,5 @@ select
     , 'bcda' as data_source
     , filename as file_name
     , processed_datetime as ingest_datetime
-from {{ source('multicare_bcda','explanationofbenefit') }} eob
+from {{ ref('explanationofbenefit') }} eob
 where eob.type_coding_1_code = 'pharmacy'

@@ -5,7 +5,7 @@ with parse_enrollment_start_date as(
         , filename
         , min(date(cast(substring(replace(filename,'test\\cms-ndjson-upload-Patient-',''),1,6) as varchar)||'01','YYYYMMDD'))
         as enrollment_start_date
-    from {{ source('multicare_bcda','patient') }}
+    from {{ ref('patient') }}
     group by
         id
         , filename
@@ -16,8 +16,8 @@ with parse_enrollment_start_date as(
         , coverage_id
         , valuecoding_code as medicare_status_code
         , valuecoding_display as medicare_status_description
-    from {{ source('multicare_bcda','coverage') }} cov
-    left join {{ source('multicare_bcda','coverage_extension') }} ext
+    from {{ ref('coverage') }} cov
+    left join {{ ref('coverage_extension') }} ext
         on cov.id = ext.coverage_id
         and url = 'https://bluebutton.cms.gov/resources/variables/ms_cd'
     where coverage_id is not null
@@ -28,8 +28,8 @@ with parse_enrollment_start_date as(
     , cov.filename
      , min(date(cast(substring(replace(cov.filename,'test\\cms-ndjson-upload-Coverage-',''),1,6) as varchar)||'01','YYYYMMDD'))
         as enrollment_end_date
-    from {{ source('multicare_bcda','coverage') }} cov
-    left join {{ source('multicare_bcda','coverage_extension') }} ext
+    from {{ ref('coverage') }} cov
+    left join {{ ref('coverage_extension') }} ext
         on cov.id = ext.coverage_id
         and url = 'https://bluebutton.cms.gov/resources/variables/a_trm_cd'
     where coverage_id is not null
@@ -79,12 +79,12 @@ select distinct
     , 'bcda' as data_source
     , pat.filename as file_name
     , pat.processed_datetime as ingest_datetime
-from {{ source('multicare_bcda','patient') }} pat
+from {{ ref('patient') }} pat
 left join parse_enrollment_start_date es
     on pat.id = es.patient_id
 left join parse_enrollment_end_date ee
     on pat.id = ee.patient_id
-left join {{ source('multicare_bcda','patient_identifier') }} pat_id
+left join {{ ref('patient_identifier') }} pat_id
     on pat.id = pat_id.patient_id
     and pat_id.type_coding_0_code = 'MC'
 left join medicare_status m

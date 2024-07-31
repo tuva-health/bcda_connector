@@ -1,9 +1,9 @@
 version: 2
 
 sources:
-  - name: multicare_bcda
-    database: multicare_bcda
-    schema:  raw_data
+  - name: source_input
+    database: "{{ var('input_database') }}"
+    schema: "{{ var('input_schema') }}"
     tables:
       - name: coverage
       - name: coverage_extension
