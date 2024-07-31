@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: coverage
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: coverage_extension
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_benefitbalance_0_financial
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_careteam
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_diagnosis
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_extension
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_item_0_adjudication
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_item_0_extension
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_procedure
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: explanationofbenefit_supportinginfo
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: patient
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table
+
+  - name: patient_identifier
+    description: Output from FHIR flattener
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
+        {% else %}_tuva_claims{%- endif -%}
+      tags: bcda
+      materialized: table

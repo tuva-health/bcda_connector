@@ -7,10 +7,9 @@ profile: default
 
 vars:
 
-  input_database: tuva
+  input_database: multicare_bcda
   input_schema: raw_data
 
-  clinical_enabled: true
   claims_enabled: true
 
 model-paths: ["models"]

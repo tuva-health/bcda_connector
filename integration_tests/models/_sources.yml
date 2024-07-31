@@ -8,7 +8,7 @@ sources:
       - name: coverage
       - name: coverage_extension
       - name: explanationofbenefit
-      - name: explanationofbenefit_benefitbalance_0_final
+      - name: explanationofbenefit_benefitbalance_0_financial
       - name: explanationofbenefit_careteam
       - name: explanationofbenefit_diagnosis
       - name: explanationofbenefit_extension
