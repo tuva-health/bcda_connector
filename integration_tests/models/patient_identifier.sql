@@ -1,1 +1,1 @@
-select * from {{ source('multicare_bcda','patient_identifier') }}
+select * from {{ source('source_input','patient_identifier') }}

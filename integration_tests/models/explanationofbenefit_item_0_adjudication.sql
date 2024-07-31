@@ -1,1 +1,1 @@
-select * from {{ source('multicare_bcda','explanationofbenefit_item_0_adjudication') }}
+select * from {{ source('source_input','explanationofbenefit_item_0_adjudication') }}

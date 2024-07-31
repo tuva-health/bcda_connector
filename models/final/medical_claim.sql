@@ -152,7 +152,7 @@ select
     , eob.filename as file_name
     , eob.processed_datetime as ingest_datetime
 from {{ ref('explanationofbenefit') }} eob
-left join {{ source('explanationofbenefit_extension') }} tob_2
+left join {{ ref('explanationofbenefit_extension') }} tob_2
     on eob.id = tob_2.eob_id
     and url = 'https://bluebutton.cms.gov/resources/variables/clm_srvc_clsfctn_type_cd'
 left join {{ ref('explanationofbenefit_supportinginfo') }} tob_3
