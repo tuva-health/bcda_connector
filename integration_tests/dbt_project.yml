@@ -4,10 +4,9 @@ version: '1.0.0'
 
 profile: default
 
-
 vars:
 
-  input_database: multicare_bcda
+  input_database: bcda
   input_schema: raw_data
 
   claims_enabled: true
