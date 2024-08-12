@@ -6,7 +6,10 @@ profile: default
 
 vars:
 
-  input_database: bcda
+  bcda_patient_file_prefix:  fhir_input\\patient_
+  bcda_coverage_file_prefix:  fhir_input\\coverage_
+
+  input_database: cms_bcda_sample
   input_schema: raw_data
 
   claims_enabled: true

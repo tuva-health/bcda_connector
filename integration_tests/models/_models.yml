@@ -5,8 +5,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -14,8 +14,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -23,8 +23,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -32,8 +32,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -41,8 +41,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -50,8 +50,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -59,8 +59,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -68,8 +68,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -77,8 +77,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -86,8 +86,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -95,8 +95,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -104,8 +104,8 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table
 
@@ -113,7 +113,7 @@ models:
     description: Output from FHIR flattener
     config:
       schema: |
-        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_tuva_claims
-        {% else %}_tuva_claims{%- endif -%}
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}raw_data
+        {% else %}raw_data{%- endif -%}
       tags: bcda
       materialized: table

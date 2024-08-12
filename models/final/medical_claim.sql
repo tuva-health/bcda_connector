@@ -10,8 +10,8 @@ select
     , 'medicare' as plan
     , nullif(billableperiod_start,'') as claim_start_date
     , nullif(billableperiod_end,'') as claim_end_date
-    , null as claim_line_start_date
-    , null as claim_line_end_date
+    , eob.item_0_servicedperiod_start as claim_line_start_date
+    , eob.item_0_servicedperiod_end as claim_line_end_date
     , nullif(admission.timingperiod_start,'') as admission_date
     , nullif(admission.timingperiod_end,'') as discharge_date
     , ad_src.code_coding_0_code as admit_source_code
@@ -26,17 +26,17 @@ select
     , null as apr_drg_code
     , item_0_revenue_coding_0_code as revenue_center_code
     , nullif(item_0_quantity_value, '') as service_unit_quantity
-    , item_0_productorservice_coding_0_code as hcpcs_code
+    , replace(eob.item_0_productorservice_coding_0_code,'NULL',null) as hcpcs_code
     , null as hcpcs_modifier_1
     , null as hcpcs_modifier_2
     , null as hcpcs_modifier_3
     , null as hcpcs_modifier_4
     , null as hcpcs_modifier_5
-    , null as rendering_npi
+    , npi.attending as rendering_npi
     , null as rendering_tin
-    , null as billing_npi
+    , eob.provider_identifier_value as billing_npi
     , null as billing_tin
-    , null as facility_npi
+    , eob.contained_0_identifier_1_value as facility_npi
     , nullif(payment_date,'') as paid_date
     , nullif(payment_amount_value,'') as paid_amount
     , null as allowed_amount
@@ -61,11 +61,11 @@ select
     , dx.diagnosis_code_13
     , dx.diagnosis_code_14
     , dx.diagnosis_code_15
-    , dx.diagnosis_code_16
-    , dx.diagnosis_code_17
-    , dx.diagnosis_code_18
-    , dx.diagnosis_code_19
-    , dx.diagnosis_code_20
+    , null as diagnosis_code_16
+    , null as diagnosis_code_17
+    , null as diagnosis_code_18
+    , null as diagnosis_code_19
+    , null as diagnosis_code_20
     , null as diagnosis_code_21
     , null as diagnosis_code_22
     , null as diagnosis_code_23
@@ -113,11 +113,11 @@ select
     , px.procedure_code_14
     , px.procedure_code_15
     , px.procedure_code_16
-    , px.procedure_code_17
-    , px.procedure_code_18
-    , px.procedure_code_19
-    , px.procedure_code_20
-    , px.procedure_code_21
+    , null as procedure_code_17
+    , null as procedure_code_18
+    , null as procedure_code_19
+    , null as procedure_code_20
+    , null as procedure_code_21
     , null as procedure_code_22
     , null as procedure_code_23
     , null as procedure_code_24
@@ -138,11 +138,11 @@ select
     , px.procedure_date_14
     , px.procedure_date_15
     , px.procedure_date_16
-    , px.procedure_date_17
-    , px.procedure_date_18
-    , px.procedure_date_19
-    , px.procedure_date_20
-    , px.procedure_date_21
+    , null as procedure_date_17
+    , null as procedure_date_18
+    , null as procedure_date_19
+    , null as procedure_date_20
+    , null as procedure_date_21
     , null as procedure_date_22
     , null as procedure_date_23
     , null as procedure_date_24
@@ -157,7 +157,7 @@ left join {{ ref('explanationofbenefit_extension') }} tob_2
     and url = 'https://bluebutton.cms.gov/resources/variables/clm_srvc_clsfctn_type_cd'
 left join {{ ref('explanationofbenefit_supportinginfo') }} tob_3
     on eob.id = tob_3.eob_id
-    and LOWER(category_coding_0_display) = 'type of bill'
+    and lower(category_coding_0_display) = 'type of bill'
 left join {{ ref('explanationofbenefit_supportinginfo') }} dis
     on eob.id = dis.eob_id
     and LOWER(dis.category_coding_0_display) = 'discharge status'
@@ -176,4 +176,6 @@ left join {{ ref('diagnosis_pivot') }} dx
     on eob.id = dx.eob_id
 left join {{ ref('procedure_pivot') }} px
     on eob.id = px.eob_id
+left join {{ ref('careteam_pivot') }} npi
+    on eob.id = npi.eob_id
 where eob.type_coding_1_code <> 'pharmacy'

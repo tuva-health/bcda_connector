@@ -7,7 +7,7 @@ select
     , null as member_id
     , 'medicare' as payer
     , 'medicare' as plan
-    , null as prescribing_provider_npi
+    , npi.prescribing as prescribing_provider_npi
     , null as dispensing_provider_npi
     , item_0_serviceddate as dispensing_date
     , item_0_productorservice_coding_0_code as ndc_code
@@ -32,4 +32,6 @@ select
     , filename as file_name
     , processed_datetime as ingest_datetime
 from {{ ref('explanationofbenefit') }} eob
+left join {{ ref('careteam_pivot') }} npi
+    on eob.id = npi.eob_id
 where eob.type_coding_1_code = 'pharmacy'

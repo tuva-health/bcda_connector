@@ -21,5 +21,6 @@
               )
 }}
     from {{ ref('explanationofbenefit_diagnosis') }}
+    where sequence <> ''
     group by
       eob_id
