@@ -1,22 +1,42 @@
 with file_variable as(
 
     select
-        '{{ var('bcda_coverage_file_prefix') }}' as bcda_coverage_file_prefix
+        cast('{{ var('bcda_coverage_file_prefix') }}' as {{ dbt.type_string() }} ) as bcda_coverage_file_prefix
 )
 
 
 , parse_enrollment_start_date as(
-
     select
         beneficiary_reference as patient_id
         , filename
-        , min(date(cast(substring(replace(filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01','YYYYMMDD'))
-        as enrollment_start_date
+        , cast(substring(replace(filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01' as enrollment_start_date
     from {{ ref('coverage') }} p
     cross join file_variable f
+)
+, parse_enrollment_end_date as(
+ select
+    beneficiary_reference as patient_id
+    , cov.filename
+     , cast(substring(replace(cov.filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01' as enrollment_end_date
+    from {{ ref('coverage') }} cov
+    left join {{ ref('coverage_extension') }} ext
+        on cov.id = ext.coverage_id
+        and url = 'https://bluebutton.cms.gov/resources/variables/a_trm_cd'
+    cross join file_variable f
+    where coverage_id is not null
+    and valuecoding_code <> '0'
+)
+, min_enrollment as (
+    select
+        s.patient_id
+        , min({{ try_to_cast_date('s.enrollment_start_date', 'YYYYMMDD') }} ) as enrollment_start_date
+        , min({{ try_to_cast_date('e.enrollment_end_date', 'YYYYMMDD') }} ) as enrollment_end_date
+    from parse_enrollment_start_date s
+    left join parse_enrollment_end_date e
+        on s.patient_id = e.patient_id
     group by
-        id
-        , filename
+        s.patient_id
+
 )
 , medicare_status as(
     select
@@ -30,23 +50,7 @@ with file_variable as(
         and url = 'https://bluebutton.cms.gov/resources/variables/ms_cd'
     where coverage_id is not null
 )
-, parse_enrollment_end_date as(
- select
-    beneficiary_reference as patient_id
-    , cov.filename
-     , min(date(cast(substring(replace(cov.filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01','YYYYMMDD'))
-        as enrollment_end_date
-    from {{ ref('coverage') }} cov
-    left join {{ ref('coverage_extension') }} ext
-        on cov.id = ext.coverage_id
-        and url = 'https://bluebutton.cms.gov/resources/variables/a_trm_cd'
-    cross join file_variable f
-    where coverage_id is not null
-    and valuecoding_code <> '0'
-    group by
-        beneficiary_reference
-        , cov.filename
-)
+
 
 select distinct
     pat.id as patient_id
@@ -68,8 +72,8 @@ select distinct
         when lower(deceasedboolean) = 'true' then 1
             else 0
         end as death_flag
-    , enrollment_start_date as enrollment_start_date
-    , coalesce(enrollment_end_date, last_day(getdate())) as enrollment_end_date
+    , enrollment_start_date
+    , coalesce(enrollment_end_date, {{ try_to_cast_date('last_day(getdate())', 'YYYYMMDD') }} ) as enrollment_end_date
     , 'cms' as payer
     , 'medicare' as payer_type
     , 'medicare' as plan
@@ -89,10 +93,8 @@ select distinct
     , pat.filename as file_name
     , pat.processed_datetime as ingest_datetime
 from {{ ref('patient') }} pat
-left join parse_enrollment_start_date es
-    on pat.id = es.patient_id
-left join parse_enrollment_end_date ee
-    on pat.id = ee.patient_id
+left join min_enrollment en
+    on pat.id = en.patient_id
 left join {{ ref('patient_identifier') }} pat_id
     on pat.id = pat_id.patient_id
     and pat_id.type_coding_0_code = 'MC'
