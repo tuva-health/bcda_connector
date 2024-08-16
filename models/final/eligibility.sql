@@ -1,19 +1,18 @@
 with file_variable as(
 
     select
-        '{{ var('bcda_patient_file_prefix') }}' as bcda_patient_file_prefix
-        , '{{ var('bcda_coverage_file_prefix') }}' as bcda_coverage_file_prefix
+        '{{ var('bcda_coverage_file_prefix') }}' as bcda_coverage_file_prefix
 )
 
 
 , parse_enrollment_start_date as(
 
     select
-        id as patient_id
+        beneficiary_reference as patient_id
         , filename
-        , min(date(cast(substring(replace(filename,f.bcda_patient_file_prefix,''),1,6) as varchar)||'01','YYYYMMDD'))
+        , min(date(cast(substring(replace(filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01','YYYYMMDD'))
         as enrollment_start_date
-    from {{ ref('patient') }} p
+    from {{ ref('coverage') }} p
     cross join file_variable f
     group by
         id
