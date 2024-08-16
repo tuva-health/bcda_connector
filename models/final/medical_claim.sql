@@ -4,7 +4,7 @@ select
     , item_0_sequence as claim_line_number
     , type_coding_2_code as claim_type
     , billableperiod_extension_0_valuecoding_code as claim_status
-    , replace(patient_reference,'Patient/') as patient_id
+    , replace(patient_reference,'Patient/','') as patient_id
     , null as member_id
     , 'medicare' as payer
     , 'medicare' as plan

@@ -29,8 +29,8 @@ with file_variable as(
 , min_enrollment as (
     select
         s.patient_id
-        , min({{ try_to_cast_date('s.enrollment_start_date', 'YYYYMMDD') }} ) as enrollment_start_date
-        , min({{ try_to_cast_date('e.enrollment_end_date', 'YYYYMMDD') }} ) as enrollment_end_date
+        , min({{ the_tuva_project.try_to_cast_date('s.enrollment_start_date', 'YYYYMMDD') }} ) as enrollment_start_date
+        , min({{ the_tuva_project.try_to_cast_date('e.enrollment_end_date', 'YYYYMMDD') }} ) as enrollment_end_date
     from parse_enrollment_start_date s
     left join parse_enrollment_end_date e
         on s.patient_id = e.patient_id
@@ -73,7 +73,7 @@ select distinct
             else 0
         end as death_flag
     , enrollment_start_date
-    , coalesce(enrollment_end_date, {{ try_to_cast_date('last_day(getdate())', 'YYYYMMDD') }} ) as enrollment_end_date
+    , coalesce(enrollment_end_date, {{ the_tuva_project.try_to_cast_date('last_day(getdate())', 'YYYYMMDD') }} ) as enrollment_end_date
     , 'cms' as payer
     , 'medicare' as payer_type
     , 'medicare' as plan
