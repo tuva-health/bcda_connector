@@ -1,0 +1,28 @@
+name: 'integration_tests'
+version: '1.0.0'
+
+
+profile: default
+
+vars:
+
+  bcda_patient_file_prefix:  fhir_input\\patient_
+  bcda_coverage_file_prefix:  fhir_input\\coverage_
+
+  input_database: cms_bcda_sample
+  input_schema: raw_data
+
+  claims_enabled: true
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+
+
