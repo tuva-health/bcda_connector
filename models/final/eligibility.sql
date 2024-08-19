@@ -9,7 +9,7 @@ with file_variable as(
     select
         beneficiary_reference as patient_id
         , filename
-        , cast(substring(replace(filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01' as enrollment_start_date
+        , cast(substring(replace(filename,f.bcda_coverage_file_prefix,''),1,6)  as {{ dbt.type_string() }} )||'01' as enrollment_start_date
     from {{ ref('coverage') }} p
     cross join file_variable f
 )
@@ -17,7 +17,7 @@ with file_variable as(
  select
     beneficiary_reference as patient_id
     , cov.filename
-     , cast(substring(replace(cov.filename,f.bcda_coverage_file_prefix,''),1,6) as varchar)||'01' as enrollment_end_date
+     , cast(substring(replace(cov.filename,f.bcda_coverage_file_prefix,''),1,6)  as {{ dbt.type_string() }} )||'01' as enrollment_end_date
     from {{ ref('coverage') }} cov
     left join {{ ref('coverage_extension') }} ext
         on cov.id = ext.coverage_id
