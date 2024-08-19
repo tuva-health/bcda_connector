@@ -1,156 +1,156 @@
 select
-    eob.id
-    , identifier_0_value as claim_id
-    , item_0_sequence as claim_line_number
-    , type_coding_2_code as claim_type
-    , billableperiod_extension_0_valuecoding_code as claim_status
-    , replace(patient_reference,'Patient/','') as patient_id
-    , null as member_id
-    , 'medicare' as payer
-    , 'medicare' as plan
-    , nullif(billableperiod_start,'') as claim_start_date
-    , nullif(billableperiod_end,'') as claim_end_date
-    , eob.item_0_servicedperiod_start as claim_line_start_date
-    , eob.item_0_servicedperiod_end as claim_line_end_date
-    , nullif(admission.timingperiod_start,'') as admission_date
-    , nullif(admission.timingperiod_end,'') as discharge_date
-    , ad_src.code_coding_0_code as admit_source_code
-    , ad_type.code_coding_0_code as admit_type_code
-    , dis.code_coding_0_code as discharge_disposition_code
-    , item_0_locationcodeableconcept_coding_0_code as place_of_service_code
-    , cast(facility_extension_0_valuecoding_code as varchar)||
-        cast(tob_2.valuecoding_code as varchar)||
-        cast(tob_3.code_coding_0_code as varchar)
+    cast(eob.id as {{ dbt.type_string() }} ) as eob
+    , cast(identifier_0_value as {{ dbt.type_string() }} ) as claim_id
+    , cast(item_0_sequence as {{ dbt.type_string() }} ) as claim_line_number
+    , cast(type_coding_2_code as {{ dbt.type_string() }} ) as claim_type
+    , cast(billableperiod_extension_0_valuecoding_code as {{ dbt.type_string() }} ) as claim_status
+    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as patient_id
+    , cast(null as {{ dbt.type_string() }} ) as member_id
+    , cast('medicare' as {{ dbt.type_string() }} ) as payer
+    , cast('medicare' as {{ dbt.type_string() }} ) as plan
+    , cast(replace(billableperiod_start, '',null) as date ) as claim_start_date
+    , cast(replace(billableperiod_end, '',null) as date) as claim_end_date
+    , cast(eob.item_0_servicedperiod_start as date) as claim_line_start_date
+    , cast(eob.item_0_servicedperiod_end as date) as claim_line_end_date
+    , cast(replace(admission.timingperiod_start, '',null) as date) as admission_date
+    , cast(replace(admission.timingperiod_end, '',null) as date)  as discharge_date
+    , cast(ad_src.code_coding_0_code as {{ dbt.type_string() }} ) as admit_source_code
+    , cast(ad_type.code_coding_0_code as {{ dbt.type_string() }} ) as admit_type_code
+    , cast(dis.code_coding_0_code as {{ dbt.type_string() }} ) as discharge_disposition_code
+    , cast(item_0_locationcodeableconcept_coding_0_code as {{ dbt.type_string() }} ) as place_of_service_code
+    , cast(facility_extension_0_valuecoding_code as {{ dbt.type_string() }} )||
+        cast(tob_2.valuecoding_code as {{ dbt.type_string() }} )||
+        cast(tob_3.code_coding_0_code as {{ dbt.type_string() }} )
         as bill_type_code
-    , null as ms_drg_code
-    , null as apr_drg_code
-    , item_0_revenue_coding_0_code as revenue_center_code
-    , nullif(item_0_quantity_value, '') as service_unit_quantity
-    , replace(eob.item_0_productorservice_coding_0_code,'NULL',null) as hcpcs_code
-    , null as hcpcs_modifier_1
-    , null as hcpcs_modifier_2
-    , null as hcpcs_modifier_3
-    , null as hcpcs_modifier_4
-    , null as hcpcs_modifier_5
-    , npi.attending as rendering_npi
-    , null as rendering_tin
-    , eob.provider_identifier_value as billing_npi
-    , null as billing_tin
-    , eob.contained_0_identifier_1_value as facility_npi
-    , nullif(payment_date,'') as paid_date
-    , nullif(payment_amount_value,'') as paid_amount
-    , null as allowed_amount
-    , null as charge_amount
-    , null as coinsurance_amount
-    , null as copayment_amount
-    , null as deductible_amount
-    , null as total_cost_amount
-    , 'icd_10_cm' as diagnosis_code_type
-    , dx.diagnosis_code_1
-    , dx.diagnosis_code_2
-    , dx.diagnosis_code_3
-    , dx.diagnosis_code_4
-    , dx.diagnosis_code_5
-    , dx.diagnosis_code_6
-    , dx.diagnosis_code_7
-    , dx.diagnosis_code_8
-    , dx.diagnosis_code_9
-    , dx.diagnosis_code_10
-    , dx.diagnosis_code_11
-    , dx.diagnosis_code_12
-    , dx.diagnosis_code_13
-    , dx.diagnosis_code_14
-    , dx.diagnosis_code_15
-    , null as diagnosis_code_16
-    , null as diagnosis_code_17
-    , null as diagnosis_code_18
-    , null as diagnosis_code_19
-    , null as diagnosis_code_20
-    , null as diagnosis_code_21
-    , null as diagnosis_code_22
-    , null as diagnosis_code_23
-    , null as diagnosis_code_24
-    , null as diagnosis_code_25
-    , null as diagnosis_poa_1
-    , null as diagnosis_poa_2
-    , null as diagnosis_poa_3
-    , null as diagnosis_poa_4
-    , null as diagnosis_poa_5
-    , null as diagnosis_poa_6
-    , null as diagnosis_poa_7
-    , null as diagnosis_poa_8
-    , null as diagnosis_poa_9
-    , null as diagnosis_poa_10
-    , null as diagnosis_poa_11
-    , null as diagnosis_poa_12
-    , null as diagnosis_poa_13
-    , null as diagnosis_poa_14
-    , null as diagnosis_poa_15
-    , null as diagnosis_poa_16
-    , null as diagnosis_poa_17
-    , null as diagnosis_poa_18
-    , null as diagnosis_poa_19
-    , null as diagnosis_poa_20
-    , null as diagnosis_poa_21
-    , null as diagnosis_poa_22
-    , null as diagnosis_poa_23
-    , null as diagnosis_poa_24
-    , null as diagnosis_poa_25
-    , 'icd-10-pcs' as procedure_code_type
-    , px.procedure_code_1
-    , px.procedure_code_2
-    , px.procedure_code_3
-    , px.procedure_code_4
-    , px.procedure_code_5
-    , px.procedure_code_6
-    , px.procedure_code_7
-    , px.procedure_code_8
-    , px.procedure_code_9
-    , px.procedure_code_10
-    , px.procedure_code_11
-    , px.procedure_code_12
-    , px.procedure_code_13
-    , px.procedure_code_14
-    , px.procedure_code_15
-    , px.procedure_code_16
-    , null as procedure_code_17
-    , null as procedure_code_18
-    , null as procedure_code_19
-    , null as procedure_code_20
-    , null as procedure_code_21
-    , null as procedure_code_22
-    , null as procedure_code_23
-    , null as procedure_code_24
-    , null as procedure_code_25
-    , px.procedure_date_1
-    , px.procedure_date_2
-    , px.procedure_date_3
-    , px.procedure_date_4
-    , px.procedure_date_5
-    , px.procedure_date_6
-    , px.procedure_date_7
-    , px.procedure_date_8
-    , px.procedure_date_9
-    , px.procedure_date_10
-    , px.procedure_date_11
-    , px.procedure_date_12
-    , px.procedure_date_13
-    , px.procedure_date_14
-    , px.procedure_date_15
-    , px.procedure_date_16
-    , null as procedure_date_17
-    , null as procedure_date_18
-    , null as procedure_date_19
-    , null as procedure_date_20
-    , null as procedure_date_21
-    , null as procedure_date_22
-    , null as procedure_date_23
-    , null as procedure_date_24
-    , null as procedure_date_25
-    , null as in_network_flag
-    , 'bcda' as data_source
-    , eob.filename as file_name
-    , eob.processed_datetime as ingest_datetime
+    , cast(null as {{ dbt.type_string() }} ) as ms_drg_code
+    , cast(null as {{ dbt.type_string() }} ) as apr_drg_code
+    , cast(item_0_revenue_coding_0_code as {{ dbt.type_string() }} ) as revenue_center_code
+    , cast(replace(item_0_quantity_value, '',null) as {{ dbt.type_int() }} ) as service_unit_quantity
+    , cast(replace(eob.item_0_productorservice_coding_0_code,'NULL',null) as {{ dbt.type_string() }} ) as hcpcs_code
+    , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_1
+    , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_2
+    , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_3
+    , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_4
+    , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_5
+    , cast(npi.attending as {{ dbt.type_string() }} ) as rendering_npi
+    , cast(null as {{ dbt.type_string() }} ) as rendering_tin
+    , cast(eob.provider_identifier_value as {{ dbt.type_string() }} ) as billing_npi
+    , cast(null as {{ dbt.type_string() }} ) as billing_tin
+    , cast(eob.contained_0_identifier_1_value as {{ dbt.type_string() }} ) as facility_npi
+    , cast(replace(payment_date,'',null) as {{ dbt.type_float() }} )as paid_date
+    , cast(replace(payment_amount_value,'',null) as {{ dbt.type_float() }} )as paid_amount
+    , cast(null as {{ dbt.type_float() }} ) as allowed_amount
+    , cast(null as {{ dbt.type_float() }} ) as charge_amount
+    , cast(null as {{ dbt.type_float() }} ) as coinsurance_amount
+    , cast(null as {{ dbt.type_float() }} ) as copayment_amount
+    , cast(null as {{ dbt.type_float() }} ) as deductible_amount
+    , cast(null as {{ dbt.type_float() }} ) as total_cost_amount
+    , cast('icd_10_cm' as {{ dbt.type_string() }} ) as diagnosis_code_type
+    , cast(dx.diagnosis_code_1 as {{ dbt.type_string() }} ) as diagnosis_code_1
+    , cast(dx.diagnosis_code_2 as {{ dbt.type_string() }} ) as diagnosis_code_2
+    , cast(dx.diagnosis_code_3 as {{ dbt.type_string() }} ) as diagnosis_code_3
+    , cast(dx.diagnosis_code_4 as {{ dbt.type_string() }} ) as diagnosis_code_4
+    , cast(dx.diagnosis_code_5 as {{ dbt.type_string() }} ) as diagnosis_code_5
+    , cast(dx.diagnosis_code_6 as {{ dbt.type_string() }} ) as diagnosis_code_6
+    , cast(dx.diagnosis_code_7 as {{ dbt.type_string() }} ) as diagnosis_code_7
+    , cast(dx.diagnosis_code_8 as {{ dbt.type_string() }} ) as diagnosis_code_8
+    , cast(dx.diagnosis_code_9 as {{ dbt.type_string() }} ) as diagnosis_code_9
+    , cast(dx.diagnosis_code_10 as {{ dbt.type_string() }} ) as diagnosis_code_10
+    , cast(dx.diagnosis_code_11 as {{ dbt.type_string() }} ) as diagnosis_code_11
+    , cast(dx.diagnosis_code_12 as {{ dbt.type_string() }} ) as diagnosis_code_12
+    , cast(dx.diagnosis_code_13 as {{ dbt.type_string() }} ) as diagnosis_code_13
+    , cast(dx.diagnosis_code_14 as {{ dbt.type_string() }} ) as diagnosis_code_14
+    , cast(dx.diagnosis_code_15 as {{ dbt.type_string() }} ) as diagnosis_code_15
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_16
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_17
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_18
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_19
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_20
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_21
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_22
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_23
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_24
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_code_25
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_1
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_2
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_3
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_4
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_5
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_6
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_7
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_8
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_9
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_10
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_11
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_12
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_13
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_14
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_15
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_16
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_17
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_18
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_19
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_20
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_21
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_22
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_23
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_24
+    , cast(null as {{ dbt.type_string() }} ) as diagnosis_poa_25
+    , cast('icd-10-pcs' as {{ dbt.type_string() }} ) as procedure_code_type
+    , cast(px.procedure_code_1 as {{ dbt.type_string() }} ) as procedure_code_1
+    , cast(px.procedure_code_2 as {{ dbt.type_string() }} ) as procedure_code_2
+    , cast(px.procedure_code_3 as {{ dbt.type_string() }} ) as procedure_code_3
+    , cast(px.procedure_code_4 as {{ dbt.type_string() }} ) as procedure_code_4
+    , cast(px.procedure_code_5 as {{ dbt.type_string() }} ) as procedure_code_5
+    , cast(px.procedure_code_6 as {{ dbt.type_string() }} ) as procedure_code_6
+    , cast(px.procedure_code_7 as {{ dbt.type_string() }} ) as procedure_code_7
+    , cast(px.procedure_code_8 as {{ dbt.type_string() }} ) as procedure_code_8
+    , cast(px.procedure_code_9 as {{ dbt.type_string() }} ) as procedure_code_9
+    , cast(px.procedure_code_10 as {{ dbt.type_string() }} ) as procedure_code_10
+    , cast(px.procedure_code_11 as {{ dbt.type_string() }} ) as procedure_code_11
+    , cast(px.procedure_code_12 as {{ dbt.type_string() }} ) as procedure_code_12
+    , cast(px.procedure_code_13 as {{ dbt.type_string() }} ) as procedure_code_13
+    , cast(px.procedure_code_14 as {{ dbt.type_string() }} ) as procedure_code_14
+    , cast(px.procedure_code_15 as {{ dbt.type_string() }} ) as procedure_code_15
+    , cast(px.procedure_code_16 as {{ dbt.type_string() }} ) as procedure_code_16
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_17
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_18
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_19
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_20
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_21
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_22
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_23
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_24
+    , cast(null as {{ dbt.type_string() }} ) as procedure_code_25
+    , cast(px.procedure_date_1 as date) as procedure_date_1
+    , cast(px.procedure_date_2 as date) as procedure_date_2
+    , cast(px.procedure_date_3 as date) as procedure_date_3
+    , cast(px.procedure_date_4 as date) as procedure_date_4
+    , cast(px.procedure_date_5 as date) as procedure_date_5
+    , cast(px.procedure_date_6 as date) as procedure_date_6
+    , cast(px.procedure_date_7 as date) as procedure_date_7
+    , cast(px.procedure_date_8 as date) as procedure_date_8
+    , cast(px.procedure_date_9 as date) as procedure_date_9
+    , cast(px.procedure_date_10 as date) as procedure_date_10
+    , cast(px.procedure_date_11 as date) as procedure_date_11
+    , cast(px.procedure_date_12 as date) as procedure_date_12
+    , cast(px.procedure_date_13 as date) as procedure_date_13
+    , cast(px.procedure_date_14 as date) as procedure_date_14
+    , cast(px.procedure_date_15 as date) as procedure_date_15
+    , cast(px.procedure_date_16 as date) as procedure_date_16
+    , cast(null as date) as procedure_date_17
+    , cast(null as date) as procedure_date_18
+    , cast(null as date) as procedure_date_19
+    , cast(null as date) as procedure_date_20
+    , cast(null as date) as procedure_date_21
+    , cast(null as date) as procedure_date_22
+    , cast(null as date) as procedure_date_23
+    , cast(null as date) as procedure_date_24
+    , cast(null as date) as procedure_date_25
+    , cast(null as {{ dbt.type_int() }} ) as in_network_flag
+    , cast('bcda' as {{ dbt.type_string() }} ) as data_source
+    , cast(eob.filename as {{ dbt.type_string() }} ) as file_name
+    , cast(eob.processed_datetime as timestamp) as ingest_datetime
 from {{ ref('explanationofbenefit') }} eob
 left join {{ ref('explanationofbenefit_extension') }} tob_2
     on eob.id = tob_2.eob_id

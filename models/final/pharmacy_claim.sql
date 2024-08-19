@@ -1,36 +1,35 @@
 select
-    identifier_0_value as claim_id
-    , item_0_sequence as claim_line_number
-    , type_coding_1_code as claim_type
-    , billableperiod_extension_0_valuecoding_code as claim_status
-    , replace(patient_reference,'Patient/','') as patient_id
-    , null as member_id
-    , 'medicare' as payer
-    , 'medicare' as plan
-    , npi.prescribing as prescribing_provider_npi
-    , null as dispensing_provider_npi
-    , item_0_serviceddate as dispensing_date
-    , item_0_productorservice_coding_0_code as ndc_code
-    , case
+    cast(identifier_0_value as {{ dbt.type_string() }} ) as claim_id
+    , cast(item_0_sequence as {{ dbt.type_int() }} ) as claim_line_number
+    , cast(type_coding_1_code as {{ dbt.type_string() }} ) as claim_type
+    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as patient_id
+    , cast(null as {{ dbt.type_string() }} ) as member_id
+    , cast('medicare' as {{ dbt.type_string() }} ) as payer
+    , cast('medicare' as {{ dbt.type_string() }} ) as plan
+    , cast(npi.prescribing as {{ dbt.type_string() }} ) as prescribing_provider_npi
+    , cast(null as {{ dbt.type_string() }} ) as dispensing_provider_npi
+    , cast(item_0_serviceddate as date) as dispensing_date
+    , cast(item_0_productorservice_coding_0_code as {{ dbt.type_string() }} ) as ndc_code
+    , cast(case
         when item_0_quantity_value = '' then null
             else item_0_quantity_value
-    end as quantity
-    , null as days_supply
-    , null as refills
-    , payment_date as paid_date
-    , case
+    end as {{ dbt.type_int() }} ) as quantity
+    , cast(null as {{ dbt.type_int() }} ) as days_supply
+    , cast(null as {{ dbt.type_int() }} ) as refills
+    , cast(payment_date as date) as paid_date
+    , cast(case
         when total_0_amount_value = '' then null
             else total_0_amount_value
-    end as paid_amount
-    , null as allowed_amount
-    , null as charge_amount
-    , null as coinsurance_amount
-    , null as copayment_amount
-    , null as deductible_amount
-    , null as in_network_flag
-    , 'bcda' as data_source
-    , filename as file_name
-    , processed_datetime as ingest_datetime
+    end as {{ dbt.type_float() }} ) as paid_amount
+    , cast(null as {{ dbt.type_float() }} ) as allowed_amount
+    , cast(null as {{ dbt.type_float() }} ) as charge_amount
+    , cast(null as {{ dbt.type_float() }} ) as coinsurance_amount
+    , cast(null as {{ dbt.type_float() }} ) as copayment_amount
+    , cast(null as {{ dbt.type_float() }} ) as deductible_amount
+    , cast(null as {{ dbt.type_float() }} ) as in_network_flag
+    , cast('bcda' as {{ dbt.type_string() }} ) as data_source
+    , cast(filename as {{ dbt.type_string() }} ) as file_name
+    , cast(processed_datetime as timestamp) as ingest_datetime
 from {{ ref('explanationofbenefit') }} eob
 left join {{ ref('careteam_pivot') }} npi
     on eob.id = npi.eob_id
