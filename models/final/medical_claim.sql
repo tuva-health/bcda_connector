@@ -1,9 +1,7 @@
 select
-    cast(eob.id as {{ dbt.type_string() }} ) as eob
-    , cast(identifier_0_value as {{ dbt.type_string() }} ) as claim_id
-    , cast(item_0_sequence as {{ dbt.type_string() }} ) as claim_line_number
+      cast(identifier_0_value as {{ dbt.type_string() }} ) as claim_id
+    , cast(item_0_sequence as {{ dbt.type_int() }} ) as claim_line_number
     , cast(type_coding_2_code as {{ dbt.type_string() }} ) as claim_type
-    , cast(billableperiod_extension_0_valuecoding_code as {{ dbt.type_string() }} ) as claim_status
     , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as patient_id
     , cast(null as {{ dbt.type_string() }} ) as member_id
     , cast('medicare' as {{ dbt.type_string() }} ) as payer
@@ -33,9 +31,9 @@ select
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_4
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_5
     , cast(npi.attending as {{ dbt.type_string() }} ) as rendering_npi
-    , cast(null as {{ dbt.type_string() }} ) as rendering_tin
+    , cast(null as {{ dbt.type_int() }} ) as rendering_tin
     , cast(eob.provider_identifier_value as {{ dbt.type_string() }} ) as billing_npi
-    , cast(null as {{ dbt.type_string() }} ) as billing_tin
+    , cast(null as {{ dbt.type_int() }} ) as billing_tin
     , cast(eob.contained_0_identifier_1_value as {{ dbt.type_string() }} ) as facility_npi
     , cast(replace(payment_date,'',null) as date ) as paid_date
     , cast(replace(payment_amount_value,'',null) as {{ dbt.type_float() }} )as paid_amount
