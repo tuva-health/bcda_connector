@@ -8,12 +8,12 @@ select
     , cast(null as {{ dbt.type_string() }} ) as member_id
     , cast('medicare' as {{ dbt.type_string() }} ) as payer
     , cast('medicare' as {{ dbt.type_string() }} ) as plan
-    , cast(replace(billableperiod_start, '',null) as date ) as claim_start_date
-    , cast(replace(billableperiod_end, '',null) as date) as claim_end_date
-    , cast(eob.item_0_servicedperiod_start as date) as claim_line_start_date
-    , cast(eob.item_0_servicedperiod_end as date) as claim_line_end_date
-    , cast(replace(admission.timingperiod_start, '',null) as date) as admission_date
-    , cast(replace(admission.timingperiod_end, '',null) as date)  as discharge_date
+    , {{ try_to_cast_date('billableperiod_start', 'YYYY-MM-DD') }}  as claim_start_date
+    , {{ try_to_cast_date('billableperiod_end', 'YYYY-MM-DD') }} as claim_end_date
+    , {{ try_to_cast_date('eob.item_0_servicedperiod_start', 'YYYY-MM-DD') }} as claim_line_start_date
+    , {{ try_to_cast_date('eob.item_0_servicedperiod_end', 'YYYY-MM-DD') }}  as claim_line_end_date
+    , {{ try_to_cast_date('admission.timingperiod_start', 'YYYY-MM-DD') }} as admission_date
+    , {{ try_to_cast_date('admission.timingperiod_end', 'YYYY-MM-DD') }} as discharge_date
     , cast(ad_src.code_coding_0_code as {{ dbt.type_string() }} ) as admit_source_code
     , cast(ad_type.code_coding_0_code as {{ dbt.type_string() }} ) as admit_type_code
     , cast(dis.code_coding_0_code as {{ dbt.type_string() }} ) as discharge_disposition_code
@@ -122,22 +122,22 @@ select
     , cast(null as {{ dbt.type_string() }} ) as procedure_code_23
     , cast(null as {{ dbt.type_string() }} ) as procedure_code_24
     , cast(null as {{ dbt.type_string() }} ) as procedure_code_25
-    , cast(px.procedure_date_1 as date) as procedure_date_1
-    , cast(px.procedure_date_2 as date) as procedure_date_2
-    , cast(px.procedure_date_3 as date) as procedure_date_3
-    , cast(px.procedure_date_4 as date) as procedure_date_4
-    , cast(px.procedure_date_5 as date) as procedure_date_5
-    , cast(px.procedure_date_6 as date) as procedure_date_6
-    , cast(px.procedure_date_7 as date) as procedure_date_7
-    , cast(px.procedure_date_8 as date) as procedure_date_8
-    , cast(px.procedure_date_9 as date) as procedure_date_9
-    , cast(px.procedure_date_10 as date) as procedure_date_10
-    , cast(px.procedure_date_11 as date) as procedure_date_11
-    , cast(px.procedure_date_12 as date) as procedure_date_12
-    , cast(px.procedure_date_13 as date) as procedure_date_13
-    , cast(px.procedure_date_14 as date) as procedure_date_14
-    , cast(px.procedure_date_15 as date) as procedure_date_15
-    , cast(px.procedure_date_16 as date) as procedure_date_16
+    , {{ try_to_cast_date('px.procedure_date_1', 'YYYYMMDD') }} as procedure_date_1
+    , {{ try_to_cast_date('px.procedure_date_2', 'YYYYMMDD') }} as procedure_date_2
+    , {{ try_to_cast_date('px.procedure_date_3', 'YYYYMMDD') }} as procedure_date_3
+    , {{ try_to_cast_date('px.procedure_date_4', 'YYYYMMDD') }} as procedure_date_4
+    , {{ try_to_cast_date('px.procedure_date_5', 'YYYYMMDD') }} as procedure_date_5
+    , {{ try_to_cast_date('px.procedure_date_6', 'YYYYMMDD') }} as procedure_date_6
+    , {{ try_to_cast_date('px.procedure_date_7', 'YYYYMMDD') }} as procedure_date_7
+    , {{ try_to_cast_date('px.procedure_date_8', 'YYYYMMDD') }} as procedure_date_8
+    , {{ try_to_cast_date('px.procedure_date_9', 'YYYYMMDD') }} as procedure_date_9
+    , {{ try_to_cast_date('px.procedure_date_10', 'YYYYMMDD') }} as procedure_date_10
+    , {{ try_to_cast_date('px.procedure_date_11', 'YYYYMMDD') }} as procedure_date_11
+    , {{ try_to_cast_date('px.procedure_date_12', 'YYYYMMDD') }} as procedure_date_12
+    , {{ try_to_cast_date('px.procedure_date_13', 'YYYYMMDD') }} as procedure_date_13
+    , {{ try_to_cast_date('px.procedure_date_14', 'YYYYMMDD') }} as procedure_date_14
+    , {{ try_to_cast_date('px.procedure_date_15', 'YYYYMMDD') }} as procedure_date_15
+    , {{ try_to_cast_date('px.procedure_date_16', 'YYYYMMDD') }} as procedure_date_16
     , cast(null as date) as procedure_date_17
     , cast(null as date) as procedure_date_18
     , cast(null as date) as procedure_date_19
