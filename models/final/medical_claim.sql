@@ -37,7 +37,7 @@ select
     , cast(eob.provider_identifier_value as {{ dbt.type_string() }} ) as billing_npi
     , cast(null as {{ dbt.type_string() }} ) as billing_tin
     , cast(eob.contained_0_identifier_1_value as {{ dbt.type_string() }} ) as facility_npi
-    , cast(replace(payment_date,'',null) as {{ dbt.type_float() }} )as paid_date
+    , cast(replace(payment_date,'',null) as date )as paid_date
     , cast(replace(payment_amount_value,'',null) as {{ dbt.type_float() }} )as paid_amount
     , cast(null as {{ dbt.type_float() }} ) as allowed_amount
     , cast(null as {{ dbt.type_float() }} ) as charge_amount
