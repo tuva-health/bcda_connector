@@ -1,6 +1,9 @@
 name: dbt_v1.6.3_snowflake_build_full_refresh
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 
 env:
