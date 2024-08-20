@@ -36,7 +36,7 @@ jobs:
       - name: dbt-build
         uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/redshift --vars {"input_database":"bcda_synthetic ","input_schema":"raw_data"}'
+          dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/redshift --vars {"input_database":"bcda_synthetic","input_schema":"raw_data"}'
           dbt_project_folder: "integration_tests"
 
       - name: Get the result
