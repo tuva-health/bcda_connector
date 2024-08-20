@@ -1,7 +1,10 @@
-name: dbt_v1.7.3_redshift_build_full_claims
+name: dbt_v1.6.3_redshift_build_full_refresh
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 
 
@@ -9,7 +12,6 @@ env:
   DBT_REDSHIFT_CI_HOST: ${{ secrets.DBT_REDSHIFT_CI_HOST }}
   DBT_REDSHIFT_CI_USER: ${{ secrets.DBT_REDSHIFT_CI_USER }}
   DBT_REDSHIFT_CI_PASSWORD: ${{ secrets.DBT_REDSHIFT_CI_PASSWORD }}
-  DBT_REDSHIFT_CI_PORT: ${{ secrets.DBT_REDSHIFT_CI_PORT }}
 
   
 jobs:
@@ -20,21 +22,21 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: "dbt deps --profiles-dir .integration_tests/profiles/redshift"
+          dbt_command: "dbt deps --profiles-dir ./profiles/redshift"
           dbt_project_folder: "integration_tests"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: "dbt debug --profiles-dir .integration_tests/profiles/redshift"
+          dbt_command: "dbt debug --profiles-dir ./profiles/redshift"
           dbt_project_folder: "integration_tests"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: 'dbt build --full-refresh --profiles-dir .integration_tests/profiles/redshift --vars {"input_database":"bcda_synthetic ","input_schema":"input_layer"}'
+          dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/redshift --vars {"input_database":"bcda_synthetic","input_schema":"raw_data"}'
           dbt_project_folder: "integration_tests"
 
       - name: Get the result

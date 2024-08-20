@@ -1,6 +1,9 @@
-name: dbt_v1.7.3_snowflake_build_full_claims
+name: dbt_v1.6.3_snowflake_build_full_refresh
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 
 env:
@@ -20,21 +23,21 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: "dbt deps --profiles-dir .integration_tests/profiles/snowflake"
+          dbt_command: "dbt deps --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "integration_tests"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: "dbt debug --profiles-dir .integration_tests/profiles/snowflake"
+          dbt_command: "dbt debug --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "integration_tests"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
-          dbt_command: 'dbt build --full-refresh --profiles-dir .integration_tests/profiles/snowflake --vars {"input_database":"bcda_synthetic","input_schema":"input_layer"}'
+          dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/snowflake --vars {"input_database":"bcda_synthetic","input_schema":"raw_data"}'
           dbt_project_folder: "integration_tests"
 
       - name: Get the result

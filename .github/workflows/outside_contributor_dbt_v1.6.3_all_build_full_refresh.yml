@@ -1,4 +1,4 @@
-name: outside_contributor_dbt_v1.7.3_all_build_full_refresh
+name: outside_contributor_dbt_v1.6.3_all_build_full_refresh
 
 on:
   workflow_dispatch:
@@ -35,19 +35,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/snowflake --vars {"input_database":"dev_ci_testing","input_schema":"input_layer","clinical_enabled":true,"claims_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -66,19 +66,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt run --profiles-dir ./profiles/snowflake --vars {"input_database":"dev_ci_testing","input_schema":"input_layer","claims_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -98,19 +98,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/snowflake"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt run --profiles-dir ./profiles/snowflake --vars {"input_database":"dev_ci_testing","input_schema":"input_layer","clinical_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -129,19 +129,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/redshift"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/redshift"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/redshift --vars {"input_database":"dev_ci_testing","input_schema":"input_layer","clinical_enabled":true,"claims_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -161,19 +161,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/redshift"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/redshift"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt run --profiles-dir ./profiles/redshift --vars {"input_database":"dev_ci_testing","input_schema":"input_layer","claims_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -193,19 +193,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/redshift"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/redshift"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt run --profiles-dir ./profiles/redshift --vars {"input_database":"dev_ci_testing","input_schema":"input_layer","clinical_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -224,19 +224,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/bigquery"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/bigquery"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt build --full-refresh --profiles-dir ./profiles/bigquery --vars {"input_database":"dev-ci-testing","input_schema":"input_layer","clinical_enabled":true,"claims_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -255,19 +255,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/bigquery"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/bigquery"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt run --profiles-dir ./profiles/bigquery --vars {"input_database":"dev-ci-testing","input_schema":"input_layer","claims_enabled":true}'
           dbt_project_folder: "ci_testing"
@@ -287,19 +287,19 @@ jobs:
           ref: refs/pull/${{ github.event.inputs.prNumber }}/merge
 
       - name: dbt-deps
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt deps --profiles-dir ./profiles/bigquery"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-debug
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: "dbt debug --profiles-dir ./profiles/bigquery"
           dbt_project_folder: "ci_testing"
 
       - name: dbt-build
-        uses: mwhitaker/dbt-action@v1.7.3
+        uses: mwhitaker/dbt-action@v1.6.3
         with:
           dbt_command: 'dbt run --profiles-dir ./profiles/bigquery --vars {"input_database":"dev-ci-testing","input_schema":"input_layer","clinical_enabled":true}'
           dbt_project_folder: "ci_testing"
