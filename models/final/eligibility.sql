@@ -80,7 +80,9 @@ select distinct
     , cast(null as {{ dbt.type_string() }} ) as original_reason_entitlement_code
     , cast(null as {{ dbt.type_string() }} ) as dual_status_code
     , cast(m.medicare_status_code as {{ dbt.type_string() }} ) as medicare_status_code
+    , cast(null as {{ dbt.type_string() }} ) as name_suffix
     , cast(name_0_family as {{ dbt.type_string() }} ) as first_name
+    , cast(name_0_given_1 as {{ dbt.type_string() }} ) as middle_name
     , cast(name_0_given_0 as {{ dbt.type_string() }} ) as last_name
     , cast(null as {{ dbt.type_string() }} ) as social_security_number
     , cast(null as {{ dbt.type_string() }} ) as subscriber_relation
@@ -89,6 +91,8 @@ select distinct
     , cast(address_0_state as {{ dbt.type_string() }} ) as state
     , cast(address_0_postalcode as {{ dbt.type_string() }} ) as zip_code
     , cast(null as {{ dbt.type_string() }} ) as phone
+    , cast(null as {{ dbt.type_string() }} ) as email
+    , cast(null as {{ dbt.type_string() }} ) as ethnicity
     , cast('bcda' as {{ dbt.type_string() }} ) as data_source
     , cast(pat.filename as {{ dbt.type_string() }} ) as file_name
     , cast(pat.processed_datetime as timestamp) as ingest_datetime
