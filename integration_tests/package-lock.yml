@@ -1,4 +1,6 @@
 packages:
+  - local: ../
+    name: bcda_connector
   - name: dbt_utils
     package: dbt-labs/dbt_utils
     version: 1.3.0
@@ -14,4 +16,4 @@ packages:
   - name: dbt_date
     package: godatadriven/dbt_date
     version: 0.16.1
-sha1_hash: 95d14f1be12937709932296cd3dbc523d8fc3645
+sha1_hash: de2deba3d66ce03d8c02949013650cc9b94f6030
