@@ -71,7 +71,7 @@ select distinct
     , cast(case
         when lower(deceasedboolean) = 'true' then 1
             else 0
-        end as {{ dbt.type_int() }} ) as 
+        end as {{ dbt.type_int() }} ) as death_flag
     , year(enrollment_start_date) as reference_year                
     , cast(enrollment_start_date as date) as enrollment_start_date
     , cast(coalesce(enrollment_end_date, {{ try_to_cast_date('last_day(current_date)', 'YYYYMMDD') }} ) as date) as enrollment_end_date
