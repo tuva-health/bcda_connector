@@ -209,3 +209,5 @@ left join {{ ref('procedure_pivot') }} px
 left join {{ ref('careteam_pivot') }} npi
     on eob.id = npi.eob_id
 where eob.type_coding_1_code <> 'pharmacy'
+    and nullif(nullif(trim(ext.valuecoding_code),'N'),'') is null
+    and not ((upper(trim(prcsg.valuecoding_code)) not in ('A','O','S','R') and prcsg.valuecoding_code is not null) or dnl.valuecoding_code = '0')
