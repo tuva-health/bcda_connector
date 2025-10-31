@@ -16,7 +16,7 @@ select
     , cast(ad_type.code_coding_0_code as {{ dbt.type_string() }} ) as admit_type_code
     , cast(dis.code_coding_0_code as {{ dbt.type_string() }} ) as discharge_disposition_code
     , cast(item_0_locationcodeableconcept_coding_0_code as {{ dbt.type_string() }} ) as place_of_service_code
-    , cast(facility_extension_0_valuecoding_code as {{ dbt.type_string() }} )||
+    , cast(eob.facility_extension_0_valuecoding_code as {{ dbt.type_string() }} )||
         cast(tob_2.valuecoding_code as {{ dbt.type_string() }} )||
         cast(tob_3.code_coding_0_code as {{ dbt.type_string() }} )
         as bill_type_code
@@ -24,19 +24,25 @@ select
     , cast(null as {{ dbt.type_string() }} ) as apr_drg_code
     , cast(item_0_revenue_coding_0_code as {{ dbt.type_string() }} ) as revenue_center_code
     , cast(replace(item_0_quantity_value, '',null) as {{ dbt.type_int() }} ) as service_unit_quantity
+    , care.qualification_coding_prvdr_spclty_code as claim_provider_specialty_code
     , cast(replace(eob.item_0_productorservice_coding_0_code,'NULL',null) as {{ dbt.type_string() }} ) as hcpcs_code
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_1
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_2
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_3
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_4
     , cast(null as {{ dbt.type_string() }} ) as hcpcs_modifier_5
+    , nullif(_eob.contained_0_identifier_0_value, '~') as ccn
+    , case when eob.type_coding_0_system = 'https://bluebutton.cms.gov/resources/variables/nch_clm_type_cd' then eob.type_coding_0_code end as claim_type_code
+    , nullif(othr.provider_identifier_value,'~') as other_npi
+    , nullif(atnd.provider_identifier_value, '~') as attending_npi
+    , nullif(asst.provider_identifier_value, '~') as operating_npi    
     , cast(npi.attending as {{ dbt.type_string() }} ) as rendering_npi
     , cast(null as {{ dbt.type_int() }} ) as rendering_tin
     , cast(eob.provider_identifier_value as {{ dbt.type_string() }} ) as billing_npi
     , cast(null as {{ dbt.type_int() }} ) as billing_tin
     , cast(eob.contained_0_identifier_1_value as {{ dbt.type_string() }} ) as facility_npi
     , cast(replace(payment_date,'',null) as date ) as paid_date
-    , cast(replace(payment_amount_value,'',null) as {{ dbt.type_float() }} )as paid_amount
+    , cast(replace(eob.payment_amount_value,'',null) as {{ dbt.type_float() }} )as paid_amount
     , cast(null as {{ dbt.type_float() }} ) as allowed_amount
     , cast(null as {{ dbt.type_float() }} ) as charge_amount
     , cast(null as {{ dbt.type_float() }} ) as coinsurance_amount
@@ -170,6 +176,32 @@ left join {{ ref('explanationofbenefit_supportinginfo') }} ad_src
 left join {{ ref('explanationofbenefit_supportinginfo') }} admission
     on eob.id = admission.eob_id
     and lower(admission.category_coding_0_code) = 'admissionperiod'
+left join {{ ref('explanationofbenefit_careteam') }} othr
+  on  eob.id = othr.eob_id
+  and othr.role_coding_0_code = 'otheroperating'
+left join {{ ref('explanationofbenefit_careteam') }} atnd
+  on  eob.id = atnd.eob_id
+  and atnd.role_coding_0_code = 'attending'
+left join {{ ref('explanationofbenefit_careteam') }} asst
+  on  eob.id = asst.eob_id
+  and asst.role_coding_0_code = 'assist'
+left join {{ ref('explanationofbenefit') }} _eob
+  on eob.id = _eob.id
+  and _eob.contained_0_identifier_0_type_coding_0_system = 'http://terminology.hl7.org/CodeSystem/v2-0203'
+  and _eob.contained_0_identifier_0_type_coding_0_code = 'PRN'
+left join {{ ref('explanationofbenefit_extension') }} ext
+  on  eob.id = ext.eob_id
+  and ext.url = 'https://bluebutton.cms.gov/resources/variables/clm_mdcr_non_pmt_rsn_cd'  
+left join  {{ref('explanationofbenefit_careteam')}} care
+  on  eob.id = care.eob_id
+  and perf.provider_identifier_value = care.provider_identifier_value
+  and care.qualification_coding_prvdr_spclty_system = 'https://bluebutton.cms.gov/resources/variables/prvdr_spclty'
+left join {{ ref('explanationofbenefit_item_0_extension') }} prcsg
+    on eob.id = prcsg.eob_id
+    and prcsg.url = 'https://bluebutton.cms.gov/resources/variables/line_prcsg_ind_cd'
+left join {{ ref('explanationofbenefit_extension') }} dnl
+  on eob.id = dnl.eob_id
+  and dnl.url = 'https://bluebutton.cms.gov/resources/variables/carr_clm_pmt_dnl_cd'    
 left join {{ ref('diagnosis_pivot') }} dx
     on eob.id = dx.eob_id
 left join {{ ref('procedure_pivot') }} px

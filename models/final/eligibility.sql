@@ -71,7 +71,8 @@ select distinct
     , cast(case
         when lower(deceasedboolean) = 'true' then 1
             else 0
-        end as {{ dbt.type_int() }} ) as death_flag
+        end as {{ dbt.type_int() }} ) as 
+    , year(enrollment_start_date) as reference_year                
     , cast(enrollment_start_date as date) as enrollment_start_date
     , cast(coalesce(enrollment_end_date, {{ try_to_cast_date('last_day(current_date)', 'YYYYMMDD') }} ) as date) as enrollment_end_date
     , cast('cms' as {{ dbt.type_string() }} ) as payer
@@ -80,13 +81,14 @@ select distinct
     , cast(null as {{ dbt.type_string() }} ) as original_reason_entitlement_code
     , cast(null as {{ dbt.type_string() }} ) as dual_status_code
     , cast(m.medicare_status_code as {{ dbt.type_string() }} ) as medicare_status_code
+    , nullif(trim(buyin.valuecoding_code),'') as medicare_entitlement_buyin_indicator
     , cast(name_0_family as {{ dbt.type_string() }} ) as first_name
     , cast(name_0_given_0 as {{ dbt.type_string() }} ) as last_name
     , cast(null as {{ dbt.type_string() }} ) as social_security_number
     , cast(null as {{ dbt.type_string() }} ) as subscriber_relation
     , cast(null as {{ dbt.type_string() }} ) as address
     , cast(null as {{ dbt.type_string() }} ) as city
-    , cast(address_0_state as {{ dbt.type_string() }} ) as state
+    , map.fips_state as state
     , cast(address_0_postalcode as {{ dbt.type_string() }} ) as zip_code
     , cast(null as {{ dbt.type_string() }} ) as phone
     , cast('bcda' as {{ dbt.type_string() }} ) as data_source
@@ -100,3 +102,11 @@ left join {{ ref('patient_identifier') }} pat_id
     and pat_id.type_coding_0_code = 'MC'
 left join medicare_status m
     on pat.resourcetype||'/'||pat.id = beneficiary_reference
+left join {{ref('stg_fips_ssa_state_map')}}  map
+    on pat.address_state = map.ssa_state
+left join {{ ref('stg_coverage') }} cov
+  on concat(pat.resourcetype, '/', pat.id) = cov.beneficiary_reference
+left join {{ ref('stg_coverage_extension') }} buyin
+  on cov.id = buyin.coverage_id
+  and substring(buyin.url,1,len(buyin.url) - 2) = 'https://bluebutton.cms.gov/resources/variables/buyin'
+  and datefromparts(year(member_month_date), replace(buyin.url,'https://bluebutton.cms.gov/resources/variables/buyin',''),1) = cast(e.member_month_date as date)
