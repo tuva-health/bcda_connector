@@ -2,7 +2,7 @@ select
     cast(identifier_0_value as {{ dbt.type_string() }} ) as claim_id
     , cast(item_0_sequence as {{ dbt.type_int() }} ) as claim_line_number
     , cast(type_coding_1_code as {{ dbt.type_string() }} ) as claim_type
-    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as patient_id
+    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as person_id
     , cast(null as {{ dbt.type_string() }} ) as member_id
     , cast('medicare' as {{ dbt.type_string() }} ) as payer
     , cast('medicare' as {{ dbt.type_string() }} ) as plan

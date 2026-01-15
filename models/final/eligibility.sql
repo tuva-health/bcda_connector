@@ -53,7 +53,7 @@ with file_variable as(
 
 
 select distinct
-    cast(pat.id as {{ dbt.type_string() }} ) as patient_id
+    cast(pat.id as {{ dbt.type_string() }} ) as person_id
     , cast(pat_id.value as {{ dbt.type_string() }} ) as member_id
     , cast(null as {{ dbt.type_string() }} ) as subscriber_id
     , cast(gender as {{ dbt.type_string() }} ) as gender
