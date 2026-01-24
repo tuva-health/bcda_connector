@@ -5,8 +5,10 @@ version: '0.10.0'
 profile: default
 
 vars:
-  demo_data_only: true
+  # demo_data_only: true
   claims_enabled: true
+
+  bcda_coverage_file_prefix: '202301'
 
 
 model-paths: ["models"]

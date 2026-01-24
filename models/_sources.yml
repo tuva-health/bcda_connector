@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: ccda
+  - name: bcda
     config:
       enabled: "{{ var('demo_data_only', false) == false }}"
     schema: |

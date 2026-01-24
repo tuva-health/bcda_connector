@@ -1,12 +1,11 @@
 select
     cast(identifier_0_value as {{ dbt.type_string() }} ) as claim_id
     , cast(item_0_sequence as {{ dbt.type_int() }} ) as claim_line_number
-    , cast(type_coding_1_code as {{ dbt.type_string() }} ) as claim_type
-    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as patient_id
-    , cast(null as {{ dbt.type_string() }} ) as member_id
+    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as person_id
+    , cast(replace(patient_reference,'Patient/','') as {{ dbt.type_string() }} ) as member_id
     , cast('medicare' as {{ dbt.type_string() }} ) as payer
     , cast('medicare' as {{ dbt.type_string() }} ) as plan
-    , cast(npi.prescribing as {{ dbt.type_string() }} ) as prescribing_provider_npi
+    , cast(npi.attending as {{ dbt.type_string() }} ) as prescribing_provider_npi
     , cast(null as {{ dbt.type_string() }} ) as dispensing_provider_npi
     , cast(item_0_serviceddate as date) as dispensing_date
     , cast(item_0_productorservice_coding_0_code as {{ dbt.type_string() }} ) as ndc_code
@@ -31,7 +30,7 @@ select
     , cast(filename as {{ dbt.type_string() }} ) as file_name
     , cast(null as date) as file_date
     , cast(processed_datetime as timestamp) as ingest_datetime
-from {{ ref('explanationofbenefit') }} eob
+from {{ ref('stg_explanationofbenefit') }} eob
 left join {{ ref('careteam_pivot') }} npi
     on eob.id = npi.eob_id
 where eob.type_coding_1_code = 'pharmacy'

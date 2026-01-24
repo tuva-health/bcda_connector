@@ -53,7 +53,8 @@ with file_variable as(
 
 
 select distinct
-    cast(pat.id as {{ dbt.type_string() }} ) as patient_id
+    cast(pat.id as {{ dbt.type_string() }} ) as person_id
+    , cast(pat.id as {{ dbt.type_string() }} ) as patient_id
     , cast(pat_id.value as {{ dbt.type_string() }} ) as member_id
     , cast(null as {{ dbt.type_string() }} ) as subscriber_id
     , cast(gender as {{ dbt.type_string() }} ) as gender
@@ -80,8 +81,10 @@ select distinct
     , cast(null as {{ dbt.type_string() }} ) as original_reason_entitlement_code
     , cast(null as {{ dbt.type_string() }} ) as dual_status_code
     , cast(m.medicare_status_code as {{ dbt.type_string() }} ) as medicare_status_code
-    -- , nullif(trim(buyin.valuecoding_code),'') as medicare_entitlement_buyin_indicator
     , cast(null as {{ dbt.type_string() }} ) as enrollment_status
+    , cast(NULL as {{ dbt.type_string() }} ) as hospice_flag
+    , cast(NULL as {{ dbt.type_string() }} ) as institutional_snp_flag
+    , cast(NULL as {{ dbt.type_string() }} ) as long_term_institutional_flag
     , cast(null as {{ dbt.type_string() }} ) as group_id
     , cast(null as {{ dbt.type_string() }} ) as group_name
     , cast(null as {{ dbt.type_string() }} ) as name_suffix
@@ -110,10 +113,6 @@ left join {{ ref('stg_patient_identifier') }} pat_id
 left join medicare_status m
     on pat.resourcetype||'/'||pat.id = beneficiary_reference
 left join {{ref('stg_fips_ssa_state_map')}}  map
-    on pat.address_state = map.ssa_state
+    on pat.address_0_state = map.ssa_state
 left join {{ ref('stg_coverage') }} cov
   on concat(pat.resourcetype, '/', pat.id) = cov.beneficiary_reference
-left join {{ ref('stg_coverage_extension') }} buyin
-  on cov.id = buyin.coverage_id
-  and substring(buyin.url,1,len(buyin.url) - 2) = 'https://bluebutton.cms.gov/resources/variables/buyin'
-  and datefromparts(year(member_month_date), replace(buyin.url,'https://bluebutton.cms.gov/resources/variables/buyin',''),1) = cast(e.member_month_date as date)

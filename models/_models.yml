@@ -26,7 +26,7 @@ models:
       materialized: table
       alias: pharmacy_claim
 
-### staging
+### intermediate
 
   - name: careteam_pivot
     description: Pivot medical claim procedures
@@ -51,3 +51,117 @@ models:
         {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_input_layer{% else %}input_layer{%- endif -%}
       materialized: table
       alias: procedure_pivot
+
+
+### intermediate
+  - name: stg_coverage_extension
+    description: Staging table for coverage_extension
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_coverage_extension
+
+  - name: stg_coverage
+    description: Staging table for coverage
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_coverage
+
+  - name: stg_explanationofbenefit_benefitbalance_0_financial
+    description: Staging table for explanationofbenefit_benefitbalance_0_financial
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_benefitbalance_0_financial
+
+  - name: stg_explanationofbenefit_careteam
+    description: Staging table for explanationofbenefit_careteam
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_careteam
+
+  - name: stg_explanationofbenefit_diagnosis
+    description: Staging table for explanationofbenefit_diagnosis
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_diagnosis
+
+  - name: stg_explanationofbenefit_extension
+    description: Staging table for explanationofbenefit_extension
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_extension
+
+  - name: stg_explanationofbenefit_item_0_adjudication
+    description: Staging table for explanationofbenefit_item_0_adjudication
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_item_0_adjudication
+
+  - name: stg_explanationofbenefit_item_0_extension
+    description: Staging table for explanationofbenefit_item_0_extension
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_item_0_extension
+  
+  - name: stg_explanationofbenefit_procedure
+    description: Staging table for explanationofbenefit_procedure
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_procedure
+
+  - name: stg_explanationofbenefit_supportinginfo
+    description: Staging table for explanationofbenefit_supportinginfo
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit_supportinginfo
+
+  - name: stg_explanationofbenefit
+    description: Staging table for explanationofbenefit
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_explanationofbenefit
+
+  - name: stg_fips_ssa_state_map
+    description: Staging table for stg_fips_ssa_state_map
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_fips_ssa_state_map
+
+  - name: stg_patient_identifier
+    description: Staging table for patient_identifier
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_patient_identifier
+
+  - name: stg_patient
+    description: Staging table for patient
+    config:
+      schema: |
+        {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_staging{% else %}staging{%- endif -%}
+      materialized: table
+      alias: stg_patient
