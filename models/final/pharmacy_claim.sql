@@ -29,6 +29,7 @@ select
     , cast(null as {{ dbt.type_float() }} ) as in_network_flag
     , cast('bcda' as {{ dbt.type_string() }} ) as data_source
     , cast(filename as {{ dbt.type_string() }} ) as file_name
+    , cast(null as date) as file_date
     , cast(processed_datetime as timestamp) as ingest_datetime
 from {{ ref('explanationofbenefit') }} eob
 left join {{ ref('careteam_pivot') }} npi

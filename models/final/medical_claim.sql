@@ -20,8 +20,8 @@ select
         cast(tob_2.valuecoding_code as {{ dbt.type_string() }} )||
         cast(tob_3.code_coding_0_code as {{ dbt.type_string() }} )
         as bill_type_code
-    , cast(null as {{ dbt.type_string() }} ) as ms_drg_code
-    , cast(null as {{ dbt.type_string() }} ) as apr_drg_code
+    , cast(null as {{ dbt.type_string() }} ) as drg_code_type
+    , cast(null as {{ dbt.type_string() }} ) as drg_code
     , cast(item_0_revenue_coding_0_code as {{ dbt.type_string() }} ) as revenue_center_code
     , cast(replace(item_0_quantity_value, '',null) as {{ dbt.type_int() }} ) as service_unit_quantity
     , care.qualification_coding_prvdr_spclty_code as claim_provider_specialty_code
@@ -154,52 +154,53 @@ select
     , cast(null as {{ dbt.type_int() }} ) as in_network_flag
     , cast('bcda' as {{ dbt.type_string() }} ) as data_source
     , cast(eob.filename as {{ dbt.type_string() }} ) as file_name
+    , cast(null as date) as file_date
     , cast(eob.processed_datetime as timestamp) as ingest_datetime
-from {{ ref('explanationofbenefit') }} eob
+from {{ ref('stg_explanationofbenefit') }} eob
 left join {{ ref('explanationofbenefit_extension') }} tob_2
     on eob.id = tob_2.eob_id
     and url = 'https://bluebutton.cms.gov/resources/variables/clm_srvc_clsfctn_type_cd'
-left join {{ ref('explanationofbenefit_supportinginfo') }} tob_3
+left join {{ ref('stg_explanationofbenefit_supportinginfo') }} tob_3
     on eob.id = tob_3.eob_id
     and lower(category_coding_0_display) = 'type of bill'
-left join {{ ref('explanationofbenefit_supportinginfo') }} dis
+left join {{ ref('stg_explanationofbenefit_supportinginfo') }} dis
     on eob.id = dis.eob_id
     and LOWER(dis.category_coding_0_display) = 'discharge status'
-left join {{ ref('explanationofbenefit_supportinginfo') }} ad_type
+left join {{ ref('stg_explanationofbenefit_supportinginfo') }} ad_type
     on eob.id = ad_type.eob_id
     and lower(ad_type.category_coding_0_display) = 'information'
     and lower(ad_type.category_coding_1_display) = 'claim inpatient admission type code'
-left join {{ ref('explanationofbenefit_supportinginfo') }} ad_src
+left join {{ ref('stg_explanationofbenefit_supportinginfo') }} ad_src
     on eob.id = ad_src.eob_id
     and lower(ad_src.category_coding_0_display) = 'information'
     and lower(ad_src.category_coding_1_display) = 'claim source inpatient admission code'
-left join {{ ref('explanationofbenefit_supportinginfo') }} admission
+left join {{ ref('stg_explanationofbenefit_supportinginfo') }} admission
     on eob.id = admission.eob_id
     and lower(admission.category_coding_0_code) = 'admissionperiod'
-left join {{ ref('explanationofbenefit_careteam') }} othr
+left join {{ ref('stg_explanationofbenefit_careteam') }} othr
   on  eob.id = othr.eob_id
   and othr.role_coding_0_code = 'otheroperating'
-left join {{ ref('explanationofbenefit_careteam') }} atnd
+left join {{ ref('stg_explanationofbenefit_careteam') }} atnd
   on  eob.id = atnd.eob_id
   and atnd.role_coding_0_code = 'attending'
-left join {{ ref('explanationofbenefit_careteam') }} asst
+left join {{ ref('stg_explanationofbenefit_careteam') }} asst
   on  eob.id = asst.eob_id
   and asst.role_coding_0_code = 'assist'
 left join {{ ref('explanationofbenefit') }} _eob
   on eob.id = _eob.id
   and _eob.contained_0_identifier_0_type_coding_0_system = 'http://terminology.hl7.org/CodeSystem/v2-0203'
   and _eob.contained_0_identifier_0_type_coding_0_code = 'PRN'
-left join {{ ref('explanationofbenefit_extension') }} ext
+left join {{ ref('stg_explanationofbenefit_extension') }} ext
   on  eob.id = ext.eob_id
   and ext.url = 'https://bluebutton.cms.gov/resources/variables/clm_mdcr_non_pmt_rsn_cd'  
-left join  {{ref('explanationofbenefit_careteam')}} care
+left join  {{ref('stg_explanationofbenefit_careteam')}} care
   on  eob.id = care.eob_id
   and perf.provider_identifier_value = care.provider_identifier_value
   and care.qualification_coding_prvdr_spclty_system = 'https://bluebutton.cms.gov/resources/variables/prvdr_spclty'
-left join {{ ref('explanationofbenefit_item_0_extension') }} prcsg
+left join {{ ref('stg_explanationofbenefit_item_0_extension') }} prcsg
     on eob.id = prcsg.eob_id
     and prcsg.url = 'https://bluebutton.cms.gov/resources/variables/line_prcsg_ind_cd'
-left join {{ ref('explanationofbenefit_extension') }} dnl
+left join {{ ref('stg_explanationofbenefit_extension') }} dnl
   on eob.id = dnl.eob_id
   and dnl.url = 'https://bluebutton.cms.gov/resources/variables/carr_clm_pmt_dnl_cd'    
 left join {{ ref('diagnosis_pivot') }} dx

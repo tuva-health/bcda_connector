@@ -5,6 +5,7 @@ version: '0.10.0'
 profile: default
 
 vars:
+  demo_data_only: true
   claims_enabled: true
 
 
