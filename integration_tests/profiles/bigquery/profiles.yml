@@ -1,13 +1,13 @@
 default:
-  target: dev
+  target: ci
   outputs:
-    dev:
+    ci:
       type: bigquery
       method: service-account
+      project: dev-ci-testing
       keyfile: ./creds.json
-      project: "{{ env_var('TUVA_BIGQUERY_PROJECT') }}"
       dataset: connector
-      threads: 4
+      threads: 8
       timeout_seconds: 300
       location: US
-      priority:
+      priority: interactive
