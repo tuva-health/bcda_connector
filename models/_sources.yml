@@ -4,8 +4,8 @@ sources:
   - name: bcda
     config:
       enabled: "{{ var('demo_data_only', false) == false }}"
-    schema: |
-      {%- if var('tuva_schema_prefix',None) != None -%}_{{var('tuva_schema_prefix')}}_raw{% else %}raw{%- endif -%}
+    database: "{{ var('input_database') }}"
+    schema:  "{{ var('input_schema') }}"
     tables:
       - name: coverage_extension
       - name: coverage

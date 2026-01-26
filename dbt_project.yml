@@ -5,8 +5,12 @@ version: '0.10.0'
 profile: default
 
 vars:
-  # demo_data_only: true
+  demo_data_only: true
   claims_enabled: true
+
+  # Input database and schema for BCDA source data
+  input_database: tuva
+  input_schema: raw_data
 
   bcda_coverage_file_prefix: '202301'
 
