@@ -19,7 +19,7 @@ jobs:
       # Connection variables
       MOTHERDUCK_TOKEN: ${{ secrets.DBT_MOTHERDUCK_TOKEN }}
       MOTHERDUCK_DB_NAME: "my_db"
-      MOTHERDUCK_PATH: "md:${{MOTHERDUCK_DB_NAME}}?motherduck_token=${{ env.MOTHERDUCK_TOKEN}}"
+      MOTHERDUCK_PATH: "md:${{ env.MOTHERDUCK_DB_NAME }}?motherduck_token=${{ env.MOTHERDUCK_TOKEN }}"
 
     steps:
       - name: Checkout Code
@@ -36,7 +36,7 @@ jobs:
           pip install dbt-core==${{ env.DBT_CORE_VERSION}} dbt-duckdb
 
       - name: Install dbt dependencies
-        run: dbt deps --profiles-dir ./integration_tests/profiles/b
+        run: dbt deps --profiles-dir ./integration_tests/profiles/duckdb
         working-directory: ${{ env.DBT_PROJECT_DIR }}
 
       - name: Test Connection
