@@ -7,7 +7,7 @@ Check out our [docs](https://thetuvaproject.com/) to learn about the project and
 <br/><br/>
 
 ## 🧰  What does this repo do?
-The Medicare BCDA Connector is a dbt package that maps Medicare BCDA claims data to the Tuva [claims data model](https://thetuvaproject.com/claims-data/data-model/about) which then makes it simple to run the entire [Tuva Project](https://github.com/tuva-health/the_tuva_project).
+The Medicare BCDA Connector is a dbt package that maps Medicare BCDA claims data to the Tuva [claims data model](https://thetuvaproject.com/input-layer) which then makes it simple to run the entire [Tuva Project](https://github.com/tuva-health/the_tuva_project).
 <br/><br/>  
 
 ## 🔌 Database Support
