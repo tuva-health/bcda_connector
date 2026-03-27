@@ -10,7 +10,7 @@ with file_variable as(
         beneficiary_reference as patient_id
         , filename
         , cast(substring(replace(filename,f.bcda_coverage_file_prefix,''),1,6)  as {{ dbt.type_string() }} )||'01' as enrollment_start_date
-    from {{ ref('coverage') }} p
+    from {{ ref('stg_coverage') }} p
     cross join file_variable f
 )
 , parse_enrollment_end_date as(
@@ -18,8 +18,8 @@ with file_variable as(
     beneficiary_reference as patient_id
     , cov.filename
      , cast(substring(replace(cov.filename,f.bcda_coverage_file_prefix,''),1,6)  as {{ dbt.type_string() }} )||'01' as enrollment_end_date
-    from {{ ref('coverage') }} cov
-    left join {{ ref('coverage_extension') }} ext
+    from {{ ref('stg_coverage') }} cov
+    left join {{ ref('stg_coverage_extension') }} ext
         on cov.id = ext.coverage_id
         and url = 'https://bluebutton.cms.gov/resources/variables/a_trm_cd'
     cross join file_variable f
@@ -44,8 +44,8 @@ with file_variable as(
         , coverage_id
         , valuecoding_code as medicare_status_code
         , valuecoding_display as medicare_status_description
-    from {{ ref('coverage') }} cov
-    left join {{ ref('coverage_extension') }} ext
+    from {{ ref('stg_coverage') }} cov
+    left join {{ ref('stg_coverage_extension') }} ext
         on cov.id = ext.coverage_id
         and url = 'https://bluebutton.cms.gov/resources/variables/ms_cd'
     where coverage_id is not null
@@ -53,7 +53,8 @@ with file_variable as(
 
 
 select distinct
-    cast(pat.id as {{ dbt.type_string() }} ) as patient_id
+    cast(pat.id as {{ dbt.type_string() }} ) as person_id
+    , cast(pat.id as {{ dbt.type_string() }} ) as patient_id
     , cast(pat_id.value as {{ dbt.type_string() }} ) as member_id
     , cast(null as {{ dbt.type_string() }} ) as subscriber_id
     , cast(gender as {{ dbt.type_string() }} ) as gender
@@ -71,18 +72,24 @@ select distinct
     , cast(case
         when lower(deceasedboolean) = 'true' then 1
             else 0
-        end as {{ dbt.type_int() }} ) as death_flag
-    , year(enrollment_start_date) as reference_year                
+        end as {{ dbt.type_int() }} ) as death_flag      
     , cast(enrollment_start_date as date) as enrollment_start_date
     , cast(coalesce(enrollment_end_date, {{ try_to_cast_date('last_day(current_date)', 'YYYYMMDD') }} ) as date) as enrollment_end_date
     , cast('cms' as {{ dbt.type_string() }} ) as payer
-    , cast('medicare' as {{ dbt.type_string() }} ) as payer_type
-    , cast('medicare' as {{ dbt.type_string() }} ) as plan
+    , cast(null as {{ dbt.type_string() }} ) as payer_type
+    , cast(null as {{ dbt.type_string() }} ) as plan
     , cast(null as {{ dbt.type_string() }} ) as original_reason_entitlement_code
     , cast(null as {{ dbt.type_string() }} ) as dual_status_code
     , cast(m.medicare_status_code as {{ dbt.type_string() }} ) as medicare_status_code
-    , nullif(trim(buyin.valuecoding_code),'') as medicare_entitlement_buyin_indicator
+    , cast(null as {{ dbt.type_string() }} ) as enrollment_status
+    , cast(NULL as {{ dbt.type_string() }} ) as hospice_flag
+    , cast(NULL as {{ dbt.type_string() }} ) as institutional_snp_flag
+    , cast(NULL as {{ dbt.type_string() }} ) as long_term_institutional_flag
+    , cast(null as {{ dbt.type_string() }} ) as group_id
+    , cast(null as {{ dbt.type_string() }} ) as group_name
+    , cast(null as {{ dbt.type_string() }} ) as name_suffix
     , cast(name_0_family as {{ dbt.type_string() }} ) as first_name
+    , cast(null as {{ dbt.type_string() }} ) as middle_name
     , cast(name_0_given_0 as {{ dbt.type_string() }} ) as last_name
     , cast(null as {{ dbt.type_string() }} ) as social_security_number
     , cast(null as {{ dbt.type_string() }} ) as subscriber_relation
@@ -91,22 +98,21 @@ select distinct
     , map.fips_state as state
     , cast(address_0_postalcode as {{ dbt.type_string() }} ) as zip_code
     , cast(null as {{ dbt.type_string() }} ) as phone
+    , cast(null as {{ dbt.type_string() }} ) as email
+    , cast(null as {{ dbt.type_string() }} ) as ethnicity
     , cast('bcda' as {{ dbt.type_string() }} ) as data_source
     , cast(pat.filename as {{ dbt.type_string() }} ) as file_name
+    , cast(null as date) as file_date
     , cast(pat.processed_datetime as timestamp) as ingest_datetime
-from {{ ref('patient') }} pat
+from {{ ref('stg_patient') }} pat
 left join min_enrollment en
     on pat.id = en.patient_id
-left join {{ ref('patient_identifier') }} pat_id
+left join {{ ref('stg_patient_identifier') }} pat_id
     on pat.id = pat_id.patient_id
     and pat_id.type_coding_0_code = 'MC'
 left join medicare_status m
     on pat.resourcetype||'/'||pat.id = beneficiary_reference
 left join {{ref('stg_fips_ssa_state_map')}}  map
-    on pat.address_state = map.ssa_state
+    on pat.address_0_state = map.ssa_state
 left join {{ ref('stg_coverage') }} cov
   on concat(pat.resourcetype, '/', pat.id) = cov.beneficiary_reference
-left join {{ ref('stg_coverage_extension') }} buyin
-  on cov.id = buyin.coverage_id
-  and substring(buyin.url,1,len(buyin.url) - 2) = 'https://bluebutton.cms.gov/resources/variables/buyin'
-  and datefromparts(year(member_month_date), replace(buyin.url,'https://bluebutton.cms.gov/resources/variables/buyin',''),1) = cast(e.member_month_date as date)

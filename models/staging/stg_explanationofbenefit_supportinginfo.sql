@@ -1,0 +1,9 @@
+with explanationofbenefit_supportinginfo as (
+  SELECT * FROM
+  {% if var('demo_data_only', false) %} {{ ref('explanationofbenefit_supportinginfo') }} 
+  {% else %} {{ source('bcda', 'explanationofbenefit_supportinginfo') }}{% endif %}
+)
+
+SELECT
+    *
+FROM explanationofbenefit_supportinginfo
